@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiche de cadrage du projet — IMPACT PLUS</title>
+<style>
+  :root{
+    --bleu-nuit:#12305c;
+    --bleu-fonce:#1f4e8c;
+    --bleu:#2d6cc4;
+    --bleu-clair:#7bafe0;
+    --bleu-pale:#eef4fc;
+    --gris-bord:#d7e0ec;
+    --texte:#1c2733;
+    --texte-doux:#5b6b80;
+    --blanc:#ffffff;
+    --alerte:#c0392b;
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    font-family:"Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    color:var(--texte);
+    background:linear-gradient(180deg,#f5f8fc 0%, #eef2f8 100%);
+    line-height:1.5;
+  }
+
+  /* ===== EN-TETE ===== */
+  header.top{
+    background:linear-gradient(90deg, var(--bleu-nuit) 0%, var(--bleu-fonce) 55%, var(--bleu-clair) 100%);
+    padding:28px 6vw 32px;
+    color:var(--blanc);
+  }
+  .top-inner{
+    max-width:900px;
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    gap:22px;
+  }
+  .top-inner img{
+    width:64px;
+    height:64px;
+    border-radius:14px;
+    box-shadow:0 4px 14px rgba(0,0,0,.25);
+    flex-shrink:0;
+  }
+  .top-text h1{
+    margin:0 0 4px;
+    font-size:1.55rem;
+    font-weight:700;
+    letter-spacing:.2px;
+  }
+  .top-text p{
+    margin:0;
+    font-size:.95rem;
+    color:#dce9fb;
+  }
+
+  /* ===== CONTENEUR ===== */
+  main{
+    max-width:900px;
+    margin:-18px auto 60px;
+    padding:0 6vw;
+  }
+
+  .intro-card{
+    background:var(--blanc);
+    border-radius:12px;
+    padding:20px 26px;
+    box-shadow:0 10px 30px rgba(18,48,92,.08);
+    margin-bottom:18px;
+    border-left:5px solid var(--bleu);
+  }
+  .intro-card p{margin:0;color:var(--texte-doux);font-size:.95rem;}
+
+  .wizard-status{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    padding:18px 26px;
+    margin-bottom:22px;
+    background:var(--blanc);
+    border-radius:14px;
+    border:1px solid var(--gris-bord);
+    box-shadow:0 8px 22px rgba(18,48,92,.06);
+  }
+  .wizard-badge{
+    font-size:.88rem;
+    font-weight:700;
+    text-transform:uppercase;
+    color:var(--bleu-fonce);
+    letter-spacing:.6px;
+  }
+  .wizard-progress{
+    flex:1;
+    min-width:0;
+  }
+  .wizard-bar{
+    width:100%;
+    height:10px;
+    background:linear-gradient(90deg, var(--bleu-pale), #f0f5fb);
+    border-radius:999px;
+    overflow:hidden;
+  }
+  .wizard-bar span{
+    display:block;
+    height:100%;
+    width:0;
+    background:linear-gradient(90deg, var(--bleu), var(--bleu-clair));
+    border-radius:999px;
+    transition:width .3s ease;
+  }
+
+  section.bloc{
+    background:var(--blanc);
+    border-radius:12px;
+    box-shadow:0 6px 20px rgba(18,48,92,.06);
+    margin-bottom:22px;
+    overflow:hidden;
+    border:1px solid var(--gris-bord);
+    display:none;
+  }
+  section.bloc.active{display:block;}
+  .champ.invalid .principal{color:var(--alerte);}
+  .champ.invalid input,
+  .champ.invalid textarea,
+  .champ.invalid select{
+    border-color:var(--alerte);
+    box-shadow:0 0 0 3px rgba(192,57,43,.12);
+  }
+  .champ.invalid .option{border-color:var(--alerte);}
+  .champ.invalid .erreur{
+    display:block;
+    margin-top:8px;
+    font-size:.86rem;
+    color:var(--alerte);
+  }
+  .bloc-header{
+    background:var(--bleu-pale);
+    padding:12px 26px;
+    font-weight:700;
+    color:var(--bleu-fonce);
+    font-size:.82rem;
+    text-transform:uppercase;
+    letter-spacing:.6px;
+    border-bottom:1px solid var(--gris-bord);
+  }
+  .bloc-body{padding:22px 26px 6px;}
+
+  .champ{margin-bottom:20px;}
+  .champ label.principal{
+    display:block;
+    font-weight:600;
+    margin-bottom:8px;
+    font-size:.98rem;
+    color:var(--texte);
+  }
+  .champ .num{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:22px;
+    height:22px;
+    padding:0 5px;
+    background:var(--bleu);
+    color:#fff;
+    font-size:.72rem;
+    font-weight:700;
+    border-radius:6px;
+    margin-right:8px;
+    vertical-align:middle;
+  }
+
+  input[type=text],
+  input[type=tel],
+  input[type=email],
+  input[type=date],
+  input[type=number],
+  textarea,
+  select{
+    width:100%;
+    padding:10px 12px;
+    border:1px solid var(--gris-bord);
+    border-radius:8px;
+    font-size:.95rem;
+    font-family:inherit;
+    color:var(--texte);
+    background:#fbfcfe;
+    transition:border-color .15s, box-shadow .15s;
+  }
+  input:focus, textarea:focus, select:focus{
+    outline:none;
+    border-color:var(--bleu);
+    box-shadow:0 0 0 3px rgba(45,108,196,.15);
+    background:#fff;
+  }
+  textarea{resize:vertical;min-height:80px;}
+
+  .sous-champs{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin-top:6px;
+  }
+  .sous-champ label{
+    display:block;
+    font-size:.82rem;
+    color:var(--texte-doux);
+    margin-bottom:4px;
+  }
+
+  .options{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:6px;
+  }
+  .option{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    border:1px solid var(--gris-bord);
+    border-radius:8px;
+    padding:8px 12px;
+    font-size:.9rem;
+    background:#fbfcfe;
+    cursor:pointer;
+    transition:border-color .15s, background .15s;
+  }
+  .option:hover{border-color:var(--bleu-clair);}
+  .option input{margin:0;accent-color:var(--bleu);width:16px;height:16px;flex-shrink:0;}
+  .option.autre-option{flex:1 1 100%;}
+  .option .autre-input{
+    flex:1;
+    border:none;
+    border-bottom:1px solid var(--gris-bord);
+    border-radius:0;
+    padding:2px 4px;
+    background:transparent;
+  }
+  .option .autre-input:focus{box-shadow:none;border-bottom-color:var(--bleu);}
+
+  .sous-titre{
+    font-weight:600;
+    font-size:.9rem;
+    color:var(--bleu-fonce);
+    margin:18px 0 8px;
+  }
+
+  /* ===== BARRE ACTIONS ===== */
+  .barre-actions{
+    position:sticky;
+    bottom:0;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:14px;
+    padding:16px 6vw 22px;
+    background:linear-gradient(180deg, rgba(238,242,248,0) 0%, #eef2f8 35%);
+  }
+  .btn-group{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .btn-nav{min-width:130px;}
+  .btn{
+    border:none;
+    border-radius:999px;
+    padding:13px 28px;
+    font-size:.95rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:transform .12s, box-shadow .12s, opacity .12s;
+  }
+  .btn:active{transform:scale(.97);}
+  .btn-principal{
+    background:linear-gradient(90deg, var(--bleu-fonce), var(--bleu));
+    color:#fff;
+    box-shadow:0 8px 20px rgba(31,78,140,.3);
+  }
+  .btn-principal:hover{box-shadow:0 10px 26px rgba(31,78,140,.4);}
+  .btn-secondaire{
+    background:#fff;
+    color:var(--bleu-fonce);
+    border:1px solid var(--gris-bord);
+  }
+  .btn-secondaire:hover{border-color:var(--bleu);}
+
+  .statut{
+    text-align:center;
+    font-size:.82rem;
+    color:var(--texte-doux);
+    margin-top:-8px;
+    margin-bottom:18px;
+  }
+  .statut b{color:var(--bleu-fonce);}
+
+  footer.bas{
+    text-align:center;
+    font-size:.78rem;
+    color:var(--texte-doux);
+    padding:6px 6vw 30px;
+  }
+
+  /* ===== VUE IMPRESSION (le "rapport") ===== */
+  .print-value{display:none;}
+
+  @media print{
+    body{background:#fff;}
+    header.top{
+      background:var(--bleu-fonce) !important;
+      -webkit-print-color-adjust:exact;
+      print-color-adjust:exact;
+    }
+    .bloc-header{
+      -webkit-print-color-adjust:exact;
+      print-color-adjust:exact;
+    }
+    .barre-actions, .intro-card, footer.bas{display:none !important;}
+    main{margin-top:20px;}
+    section.bloc{box-shadow:none;border:1px solid #ccc;break-inside:avoid;}
+    input, textarea, select{display:none !important;}
+    .options{display:none !important;}
+    .sous-champs{display:none !important;}
+    .print-value{
+      display:block;
+      padding:8px 10px;
+      background:#f5f8fc;
+      border:1px solid var(--gris-bord);
+      border-radius:6px;
+      min-height:20px;
+      font-size:.92rem;
+      white-space:pre-wrap;
+    }
+    .print-value:empty::after{content:"—";color:#999;}
+  }
+  @media print{
+    .wizard-status, .barre-actions{display:none !important;}
+    section.bloc{display:block !important;}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <img src="data:image/png;base64,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" alt="Logo IMPACT PLUS">
+    <div class="top-text">
+      <h1>Fiche de cadrage du projet</h1>
+      <p>Merci de compléter ce formulaire aussi précisément que possible.</p>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="intro-card">
+    <p>Ce formulaire nous permet de mieux comprendre votre entreprise et votre projet afin de vous proposer un accompagnement adapté. Une fois rempli, vous pouvez télécharger votre rapport grâce au bouton en bas de page.</p>
+  </div>
+
+  <div class="wizard-status" id="wizard-status">
+    <div class="wizard-badge">Étape <span id="wizard-step-number">1</span> sur 5</div>
+    <div class="wizard-progress">
+      <div class="wizard-bar"><span id="wizard-bar-fill"></span></div>
+    </div>
+  </div>
+
+  <form id="fiche-form">
+
+    <!-- BLOC 1 : ENTREPRISE -->
+    <section class="bloc">
+      <div class="bloc-header">Votre entreprise</div>
+      <div class="bloc-body">
+
+        <div class="champ">
+          <label class="principal" for="q1"><span class="num">1</span>Nom de l'entreprise :</label>
+          <input type="text" id="q1" name="q1">
+          <div class="print-value" data-for="q1"></div>
+        </div>
+
+        <div class="champ">
+          <label class="principal" for="q2"><span class="num">2</span>Secteur d'activité principal :</label>
+          <input type="text" id="q2" name="q2">
+          <div class="print-value" data-for="q2"></div>
+        </div>
+
+        <div class="champ">
+          <label class="principal" for="q3"><span class="num">3</span>Depuis combien d'années exercez-vous cette activité ?</label>
+          <input type="text" id="q3" name="q3">
+          <div class="print-value" data-for="q3"></div>
+        </div>
+
+        <div class="champ">
+          <label class="principal" for="q4"><span class="num">4</span>Quelle est votre principale expérience en lien avec ce projet ?</label>
+          <textarea id="q4" name="q4" rows="3"></textarea>
+          <div class="print-value" data-for="q4"></div>
+        </div>
+
+        <div class="champ">
+          <label class="principal"><span class="num">5</span>Qui sera notre principal interlocuteur durant cette mission ?</label>
+          <div class="sous-champs">
+            <div class="sous-champ">
+              <label for="q5_nom">Nom</label>
+              <input type="text" id="q5_nom" name="q5_nom">
+              <div class="print-value" data-for="q5_nom"></div>
+            </div>
+            <div class="sous-champ">
+              <label for="q5_fonction">Fonction</label>
+              <input type="text" id="q5_fonction" name="q5_fonction">
+              <div class="print-value" data-for="q5_fonction"></div>
+            </div>
+            <div class="sous-champ">
+              <label for="q5_tel">Téléphone</label>
+              <input type="tel" id="q5_tel" name="q5_tel">
+              <div class="print-value" data-for="q5_tel"></div>
+            </div>
+            <div class="sous-champ">
+              <label for="q5_email">E-mail</label>
+              <input type="email" id="q5_email" name="q5_email">
+              <div class="print-value" data-for="q5_email"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- BLOC 2 : LE PROJET -->
+    <section class="bloc">
+      <div class="bloc-header">Le projet</div>
+      <div class="bloc-body">
+
+        <div class="champ">
+          <label class="principal" for="q6"><span class="num">6</span>En quelques lignes, présentez votre projet.</label>
+          <textarea id="q6" name="q6" rows="4"></textarea>
+          <div class="print-value" data-for="q6"></div>
+        </div>
+
+        <div class="champ">
+          <label class="principal"><span class="num">7</span>Quel est l'objectif recherché ?</label>
+          <div class="options">
+            <label class="option"><input type="radio" name="q7" value="Répondre à un appel d'offres">Répondre à un appel d'offres</label>
+            <label class="option"><input type="radio" name="q7" value="Développer une nouvelle activité">Développer une nouvelle activité</label>
+            <label class="option"><input type="radio" name="q7" value="Renforcer une activité existante">Renforcer une activité existante</label>
+            <label class="option autre-option"><input type="radio" name="q7" value="Autre" class="autre-radio" data-target="q7_autre">Autre :
+              <input type="text" class="autre-input" id="q7_autre" name="q7_autre" placeholder="précisez">
+            </label>
+          </div>
+          <div class="print-value" data-for="q7"></div>
+        </div>
+
+        <div class="champ">
+          <label class="principal" for="q8"><span class="num">8</span>Où sera réalisé le projet ?</label>
+          <input type="text" id="q8" name="q8">
+          <div class="print-value" data-for="q8"></div>
+        </div>
+
+        <div class="champ">
+          <label class="principal"><span class="num">9</span>Quel est aujourd'hui son niveau d'avancement ?</label>
+          <div class="options">
+            <label class="option"><input type="radio" name="q9" value="Idée">Idée</label>
+            <label class="option"><input type="radio" name="q9" value="En préparation">En préparation</label>
+            <label class="option"><input type="radio" name="q9" value="Discussions engagées">Discussions engagées</label>
+            <label class="option"><input type="radio" name="q9" value="Appel d'offres annoncé">Appel d'offres annoncé</label>
+            <label class="option"><input type="radio" name="q9" value="Appel d'offres publié">Appel d'offres publié</label>
+            <label class="option"><input type="radio" name="q9" value="Contrat en négociation">Contrat en négociation</label>
+            <label class="option"><input type="radio" name="q9" value="Autre">Autre</label>
+          </div>
+          <div class="print-value" data-for="q9"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- BLOC 3 : LE MARCHE -->
+    <section class="bloc">
+      <div class="bloc-header">Le marché</div>
+      <div class="bloc-body">
+
+        <div class="champ">
+          <label class="principal" for="q10"><span class="num">10</span>Quel est le client concerné ?</label>
+          <input type="text" id="q10" name="q10">
+          <div class="print-value" data-for="q10"></div>
+        </div>
+
+        <div class="champ">
+          <label class="principal" for="q11"><span class="num">11</span>Quel est l'objet du marché ?</label>
+          <input type="text" id="q11" name="q11">
+          <div class="print-value" data-for="q11"></div>
+        </div>
+
+        <div class="champ">
+          <label class="principal"><span class="num">12</span>À quelle étape se trouve actuellement ce marché ?</label>
+          <div class="options">
+            <label class="option"><input type="radio" name="q12" value="Information préliminaire">Information préliminaire</label>
+            <label class="option"><input type="radio" name="q12" value="Consultation annoncée">Consultation annoncée</label>
+            <label class="option"><input type="radio" name="q12" value="Appel d'offres lancé">Appel d'offres lancé</label>
+            <label class="option"><input type="radio" name="q12" value="Préqualification">Préqualification</label>
+            <label class="option"><input type="radio" name="q12" value="Négociation">Négociation</label>
+            <label class="option"><input type="radio" name="q12" value="Attribution">Attribution</label>
+          </div>
+          <div class="print-value" data-for="q12"></div>
+        </div>
+
+        <div class="champ">
+          <label class="principal" for="q13"><span class="num">13</span>Quelle est la date prévisionnelle de lancement ou d'attribution ?</label>
+          <input type="date" id="q13" name="q13">
+          <div class="print-value" data-for="q13"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- BLOC 4 : ACCOMPAGNEMENT -->
+    <section class="bloc">
+      <div class="bloc-header">Accompagnement souhaité</div>
+      <div class="bloc-body">
+
+        <div class="champ">
+          <label class="principal"><span class="num">14</span>Quel accompagnement attendez-vous d'IMPACT PLUS ? <span style="font-weight:400;color:var(--texte-doux);">(Cochez les réponses utiles.)</span></label>
+          <div class="options">
+            <label class="option"><input type="checkbox" name="q14" value="Préparation du projet">Préparation du projet</label>
+            <label class="option"><input type="checkbox" name="q14" value="Structuration du projet">Structuration du projet</label>
+            <label class="option"><input type="checkbox" name="q14" value="Structuration financière">Structuration financière</label>
+            <label class="option"><input type="checkbox" name="q14" value="Business Plan">Business Plan</label>
+            <label class="option"><input type="checkbox" name="q14" value="Modèle financier">Modèle financier</label>
+            <label class="option"><input type="checkbox" name="q14" value="Recherche de partenaires">Recherche de partenaires</label>
+            <label class="option"><input type="checkbox" name="q14" value="Mobilisation des ressources">Mobilisation des ressources</label>
+            <label class="option"><input type="checkbox" name="q14" value="Assistance aux négociations">Assistance aux négociations</label>
+            <label class="option autre-option"><input type="checkbox" class="autre-radio" data-target="q14_autre">Autre :
+              <input type="text" class="autre-input" id="q14_autre" name="q14_autre" placeholder="précisez">
+            </label>
+          </div>
+          <div class="print-value" data-for="q14"></div>
+        </div>
+
+        <div class="champ">
+          <label class="principal"><span class="num">15</span>À combien estimez-vous le coût global du projet ?</label>
+          <div class="options">
+            <label class="option"><input type="radio" name="q15" value="Moins de 500 millions FCFA">Moins de 500 millions FCFA</label>
+            <label class="option"><input type="radio" name="q15" value="Entre 500 millions et 2 milliards FCFA">Entre 500 millions et 2 milliards FCFA</label>
+            <label class="option"><input type="radio" name="q15" value="Plus de 2 milliards FCFA">Plus de 2 milliards FCFA</label>
+            <label class="option"><input type="radio" name="q15" value="Estimation non disponible">Estimation non disponible</label>
+          </div>
+          <div class="print-value" data-for="q15"></div>
+        </div>
+
+        <div class="champ">
+          <label class="principal"><span class="num">16</span>À quoi serviront principalement les ressources recherchées ?</label>
+          <div class="options">
+            <label class="option"><input type="checkbox" name="q16" value="Acquisition d'équipements">Acquisition d'équipements</label>
+            <label class="option"><input type="checkbox" name="q16" value="Acquisition de véhicules">Acquisition de véhicules</label>
+            <label class="option"><input type="checkbox" name="q16" value="Investissements">Investissements</label>
+            <label class="option"><input type="checkbox" name="q16" value="Fonds de roulement">Fonds de roulement</label>
+            <label class="option"><input type="checkbox" name="q16" value="Autre">Autre</label>
+          </div>
+          <div class="print-value" data-for="q16"></div>
+        </div>
+
+        <div class="champ">
+          <label class="principal"><span class="num">17</span>Quelles sont les principales contraintes auxquelles vous faites face ?</label>
+          <div class="options">
+            <label class="option"><input type="checkbox" name="q17" value="Délai">Délai</label>
+            <label class="option"><input type="checkbox" name="q17" value="Financement">Financement</label>
+            <label class="option"><input type="checkbox" name="q17" value="Garanties">Garanties</label>
+            <label class="option"><input type="checkbox" name="q17" value="Exigences du client">Exigences du client</label>
+            <label class="option"><input type="checkbox" name="q17" value="Contraintes réglementaires">Contraintes réglementaires</label>
+            <label class="option"><input type="checkbox" name="q17" value="Contraintes techniques">Contraintes techniques</label>
+            <label class="option autre-option"><input type="checkbox" class="autre-radio" data-target="q17_autre">Autres :
+              <input type="text" class="autre-input" id="q17_autre" name="q17_autre" placeholder="précisez">
+            </label>
+          </div>
+          <div class="print-value" data-for="q17"></div>
+
+          <div class="sous-titre">Merci d'indiquer les documents actuellement disponibles.</div>
+          <div class="options">
+            <label class="option"><input type="checkbox" name="q17_docs" value="Présentation de l'entreprise">Présentation de l'entreprise</label>
+            <label class="option"><input type="checkbox" name="q17_docs" value="Présentation du projet">Présentation du projet</label>
+            <label class="option"><input type="checkbox" name="q17_docs" value="Cahier des charges">Cahier des charges</label>
+            <label class="option"><input type="checkbox" name="q17_docs" value="Appel d'offres">Appel d'offres</label>
+            <label class="option"><input type="checkbox" name="q17_docs" value="Lettre d'intention">Lettre d'intention</label>
+            <label class="option"><input type="checkbox" name="q17_docs" value="Contrat ou projet de contrat">Contrat ou projet de contrat</label>
+            <label class="option"><input type="checkbox" name="q17_docs" value="Estimation des investissements">Estimation des investissements</label>
+            <label class="option"><input type="checkbox" name="q17_docs" value="Devis fournisseurs">Devis fournisseurs</label>
+            <label class="option"><input type="checkbox" name="q17_docs" value="Business Plan">Business Plan</label>
+            <label class="option autre-option"><input type="checkbox" class="autre-radio" data-target="q17_docs_autre">Autres :
+              <input type="text" class="autre-input" id="q17_docs_autre" name="q17_docs_autre" placeholder="précisez">
+            </label>
+          </div>
+          <div class="print-value" data-for="q17_docs"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- BLOC 5 : ATTENTES & OBJECTIFS -->
+    <section class="bloc">
+      <div class="bloc-header">Vos attentes</div>
+      <div class="bloc-body">
+
+        <div class="champ">
+          <label class="principal" for="q18"><span class="num">18</span>Selon vous, qu'attendez-vous principalement d'IMPACT PLUS ?</label>
+          <textarea id="q18" name="q18" rows="3"></textarea>
+          <div class="print-value" data-for="q18"></div>
+        </div>
+
+        <div class="champ">
+          <label class="principal" for="q19"><span class="num">19</span>Quel résultat considérez-vous comme une réussite de cette mission ?</label>
+          <textarea id="q19" name="q19" rows="3"></textarea>
+          <div class="print-value" data-for="q19"></div>
+        </div>
+
+        <div class="champ">
+          <label class="principal" for="q20"><span class="num">20</span>À quelle date souhaitez-vous démarrer l'accompagnement ?</label>
+          <input type="date" id="q20" name="q20">
+          <div class="print-value" data-for="q20"></div>
+        </div>
+
+        <div class="champ">
+          <label class="principal" for="q21"><span class="num">21</span>Existe-t-il une échéance impérative à respecter ?</label>
+          <textarea id="q21" name="q21" rows="2"></textarea>
+          <div class="print-value" data-for="q21"></div>
+        </div>
+
+        <div class="champ">
+          <label class="principal" for="q22"><span class="num">22</span>Si cette mission est un succès, où souhaitez-vous voir votre entreprise dans les 3 à 5 prochaines années ?</label>
+          <textarea id="q22" name="q22" rows="3"></textarea>
+          <div class="print-value" data-for="q22"></div>
+        </div>
+
+      </div>
+    </section>
+
+  </form>
+
+  <div class="statut" id="statut">0 % complété</div>
+
+  <div class="barre-actions">
+    <div class="btn-group">
+      <button type="button" class="btn btn-secondaire btn-nav" id="btn-prev">Précédent</button>
+      <button type="button" class="btn btn-principal btn-nav" id="btn-next">Suivant</button>
+    </div>
+    <div class="btn-group">
+      <button type="button" class="btn btn-secondaire" id="btn-reset">Réinitialiser</button>
+      <button type="button" class="btn btn-principal" id="btn-download">Télécharger le rapport</button>
+    </div>
+  </div>
+</main>
+
+<footer class="bas">Fiche de cadrage du projet — IMPACT PLUS</footer>
+
+<script>
+(function(){
+  const form = document.getElementById('fiche-form');
+  const statut = document.getElementById('statut');
+  const stepNumber = document.getElementById('wizard-step-number');
+  const barFill = document.getElementById('wizard-bar-fill');
+  const btnPrev = document.getElementById('btn-prev');
+  const btnNext = document.getElementById('btn-next');
+  const btnDownload = document.getElementById('btn-download');
+  const steps = Array.from(form.querySelectorAll('section.bloc'));
+  let activeStep = 0;
+
+  function setActiveStep(index){
+    activeStep = Math.max(0, Math.min(index, steps.length - 1));
+    steps.forEach(function(section, idx){
+      section.classList.toggle('active', idx === activeStep);
+    });
+    stepNumber.textContent = activeStep + 1;
+    barFill.style.width = Math.round(((activeStep + 1) / steps.length) * 100) + '%';
+    btnPrev.disabled = activeStep === 0;
+    btnNext.textContent = activeStep === steps.length - 1 ? 'Voir le rapport' : 'Suivant';
+  }
+
+  function getAutreTextForGroup(name){
+    const autre = form.querySelector('#' + name + '_autre');
+    const trigger = form.querySelector('.autre-radio[data-target="' + name + '_autre"]');
+    if(autre && trigger && trigger.checked){
+      return autre.value.trim();
+    }
+    return '';
+  }
+
+  function getValueForName(name){
+    const els = form.querySelectorAll('[name="' + name + '"]');
+    if(!els.length) return '';
+    const first = els[0];
+    if(first.type === 'radio'){
+      let chosen = '';
+      els.forEach(function(el){ if(el.checked) chosen = el.value; });
+      if(chosen === 'Autre'){
+        const extra = getAutreTextForGroup(name);
+        if(extra) chosen = 'Autre : ' + extra;
+      }
+      return chosen;
+    }
+    if(first.type === 'checkbox'){
+      const vals = [];
+      els.forEach(function(el){ if(el.checked) vals.push(el.value); });
+      const extra = getAutreTextForGroup(name);
+      if(extra){
+        vals.push('Autre : ' + extra);
+      }
+      return vals.join(', ');
+    }
+    return first.value || '';
+  }
+
+  function isAuxiliaryField(name){
+    return /_autre$/.test(name);
+  }
+
+  function getFieldLabel(name){
+    const mainName = isAuxiliaryField(name) ? name.replace(/_autre$/, '') : name;
+    const el = form.querySelector('[name="' + mainName + '"]');
+    if(!el) return mainName;
+    const champ = el.closest('.champ');
+    if(champ){
+      const label = champ.querySelector('.principal');
+      if(label) return label.textContent.replace(/\s+/g,' ').trim();
+    }
+    return mainName;
+  }
+
+  function validateGroup(name, section){
+    if(isAuxiliaryField(name)) return true;
+    const els = section.querySelectorAll('[name="' + name + '"]');
+    if(!els.length) return true;
+    const first = els[0];
+    if(first.type === 'checkbox'){
+      const hasChecked = Array.from(els).some(function(el){ return el.checked; });
+      const extra = getAutreTextForGroup(name);
+      return hasChecked || extra !== '';
+    }
+    if(first.type === 'radio'){
+      const checked = Array.from(els).some(function(el){ return el.checked; });
+      if(!checked) return false;
+      const chosen = Array.from(els).find(function(el){ return el.checked; });
+      if(chosen && chosen.value === 'Autre'){
+        return getAutreTextForGroup(name) !== '';
+      }
+      return true;
+    }
+    return first.value.trim() !== '';
+  }
+
+  function markInvalidFields(section, missingNames){
+    section.querySelectorAll('.champ').forEach(function(champ){
+      champ.classList.remove('invalid');
+      const hint = champ.querySelector('.erreur');
+      if(hint) hint.remove();
+    });
+    const invalidChamps = [];
+    missingNames.forEach(function(name){
+      const el = section.querySelector('[name="' + name + '"]');
+      if(el){
+        const champ = el.closest('.champ');
+        if(champ && !invalidChamps.includes(champ)){
+          invalidChamps.push(champ);
+          champ.classList.add('invalid');
+          const hint = document.createElement('div');
+          hint.className = 'erreur';
+          hint.textContent = 'Merci de compléter cette question avant de continuer.';
+          champ.appendChild(hint);
+        }
+      }
+    });
+    if(invalidChamps.length){
+      invalidChamps[0].scrollIntoView({behavior: 'smooth', block: 'center'});
+    }
+  }
+
+  function validateStep(){
+    const current = steps[activeStep];
+    const names = new Set();
+    current.querySelectorAll('input, textarea, select').forEach(function(el){
+      if(el.name) names.add(el.name);
+    });
+    const missing = [];
+    names.forEach(function(name){
+      if(!validateGroup(name, current)){
+        missing.push(name);
+      }
+    });
+    if(missing.length){
+      markInvalidFields(current, missing);
+      const missingLabels = missing.map(getFieldLabel);
+      alert('Veuillez compléter tous les champs requis avant de passer à l\'étape suivante :\n- ' + missingLabels.join('\n- '));
+      return false;
+    }
+    return true;
+  }
+
+  function validateAllSteps(){
+    const allMissing = [];
+    steps.forEach(function(section){
+      const names = new Set();
+      section.querySelectorAll('input, textarea, select').forEach(function(el){
+        if(el.name) names.add(el.name);
+      });
+      names.forEach(function(name){
+        if(!validateGroup(name, section)){
+          allMissing.push({name, section});
+        }
+      });
+    });
+    if(allMissing.length){
+      const missingLabels = allMissing.map(function(item){ return getFieldLabel(item.name); });
+      const message = 'Le formulaire contient des champs vides :\n- ' + missingLabels.join('\n- ') + '\n\nVoulez-vous quand même télécharger le rapport ?';
+      return window.confirm(message);
+    }
+    return true;
+  }
+
+  function fillPrintValues(){
+    document.querySelectorAll('.print-value').forEach(function(box){
+      const name = box.getAttribute('data-for');
+      box.textContent = getValueForName(name);
+    });
+  }
+
+  function updateProgress(){
+    const relevant = Array.from(form.querySelectorAll('input, textarea')).filter(function(el){
+      return !el.classList.contains('autre-radio');
+    });
+    let filled = 0;
+    const counted = new Set();
+    relevant.forEach(function(el){
+      if(counted.has(el.name)) return;
+      const v = getValueForName(el.name);
+      if(v && v.trim() !== ''){ filled++; }
+      counted.add(el.name);
+    });
+    const total = counted.size;
+    const pct = total ? Math.round((filled/total)*100) : 0;
+    statut.innerHTML = pct + ' % complété <b>(' + filled + ' / ' + total + ' champs)</b>';
+  }
+
+  document.querySelectorAll('.autre-input').forEach(function(input){
+    input.addEventListener('input', function(){
+      const wrapper = input.closest('.option');
+      const box = wrapper && wrapper.querySelector('.autre-radio');
+      if(box){ box.checked = input.value.trim().length > 0; }
+    });
+  });
+
+  form.addEventListener('input', updateProgress);
+  form.addEventListener('change', updateProgress);
+  btnPrev.addEventListener('click', function(){
+    if(activeStep > 0){
+      setActiveStep(activeStep - 1);
+      window.scrollTo({top: form.offsetTop - 20, behavior: 'smooth'});
+    }
+  });
+  btnNext.addEventListener('click', function(){
+    if(activeStep === steps.length - 1){
+      if(!validateAllSteps()) return;
+      fillPrintValues();
+      window.print();
+      return;
+    }
+    if(validateStep()){
+      setActiveStep(activeStep + 1);
+      window.scrollTo({top: form.offsetTop - 20, behavior: 'smooth'});
+    }
+  });
+
+  document.getElementById('btn-reset').addEventListener('click', function(){
+    if(confirm('Effacer toutes les réponses saisies ?')){
+      form.reset();
+      updateProgress();
+      document.querySelectorAll('.champ.invalid').forEach(function(champ){ champ.classList.remove('invalid'); const hint = champ.querySelector('.erreur'); if(hint) hint.remove(); });
+      setActiveStep(0);
+    }
+  });
+
+  btnDownload.addEventListener('click', function(){
+    if(!validateAllSteps()) return;
+    fillPrintValues();
+    window.print();
+  });
+
+  window.addEventListener('beforeprint', fillPrintValues);
+
+  updateProgress();
+  setActiveStep(0);
+})();
+</script>
+
+</body>
+</html>
