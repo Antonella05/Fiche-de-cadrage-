@@ -654,6 +654,7 @@
 
 <footer class="bas">Fiche de cadrage du projet — IMPACT PLUS</footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-mO5EwmdJ4qpY7F2/Q2T4lyK38rIwoxjaEGFX0F0qQcQ0pHZM+brDX0KZokDKBzSOB4YkBOmG6UEkWqpzT9r1gA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
 (function(){
   const form = document.getElementById('fiche-form');
@@ -701,7 +702,11 @@
     }
     if(first.type === 'checkbox'){
       const vals = [];
-      els.forEach(function(el){ if(el.checked) vals.push(el.value); });
+      els.forEach(function(el){
+        if(el.checked && !el.classList.contains('autre-radio')){
+          vals.push(el.value);
+        }
+      });
       const extra = getAutreTextForGroup(name);
       if(extra){
         vals.push('Autre : ' + extra);
@@ -733,7 +738,7 @@
     if(!els.length) return true;
     const first = els[0];
     if(first.type === 'checkbox'){
-      const hasChecked = Array.from(els).some(function(el){ return el.checked; });
+      const hasChecked = Array.from(els).some(function(el){ return el.checked && el.value !== 'Autre'; });
       const extra = getAutreTextForGroup(name);
       return hasChecked || extra !== '';
     }
@@ -836,8 +841,32 @@
     names.forEach(function(name){
       const label = getFieldLabel(name);
       const value = getValueForName(name) || 'Non renseigné';
-      lines.push(label + '\n' + value + '\n');
+      lines.push(label);
+      lines.push(value);
+      lines.push('');
     });
+    const jsPDF = window.jspdf?.jsPDF || window.jsPDF;
+    if(typeof jsPDF === 'function'){
+      const doc = new jsPDF({unit: 'pt', format: 'a4'});
+      doc.setFont('Helvetica');
+      doc.setFontSize(12);
+      const margin = 40;
+      const lineHeight = 16;
+      let y = margin;
+      lines.forEach(function(text){
+        const split = doc.splitTextToSize(text, 520);
+        split.forEach(function(line){
+          if(y > 820){
+            doc.addPage();
+            y = margin;
+          }
+          doc.text(line, margin, y);
+          y += lineHeight;
+        });
+      });
+      doc.save('fiche-de-cadrage-' + new Date().toISOString().slice(0,10) + '.pdf');
+      return;
+    }
     const blob = new Blob([lines.join('\n')], {type: 'text/plain;charset=utf-8'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
