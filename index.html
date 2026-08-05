@@ -674,7 +674,7 @@
     stepNumber.textContent = activeStep + 1;
     barFill.style.width = Math.round(((activeStep + 1) / steps.length) * 100) + '%';
     btnPrev.disabled = activeStep === 0;
-    btnNext.textContent = activeStep === steps.length - 1 ? 'Voir le rapport' : 'Suivant';
+    btnNext.textContent = activeStep === steps.length - 1 ? 'Télécharger' : 'Suivant';
   }
 
   function getAutreTextForGroup(name){
@@ -824,6 +824,31 @@
     });
   }
 
+  function downloadReport(){
+    fillPrintValues();
+    const lines = ['Fiche de cadrage du projet — IMPACT PLUS', ''];
+    const names = [];
+    form.querySelectorAll('[name]').forEach(function(el){
+      if(el.name && !names.includes(el.name) && !/autre$/.test(el.name)){
+        names.push(el.name);
+      }
+    });
+    names.forEach(function(name){
+      const label = getFieldLabel(name);
+      const value = getValueForName(name) || 'Non renseigné';
+      lines.push(label + '\n' + value + '\n');
+    });
+    const blob = new Blob([lines.join('\n')], {type: 'text/plain;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'fiche-de-cadrage-' + new Date().toISOString().slice(0,10) + '.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
   function updateProgress(){
     const relevant = Array.from(form.querySelectorAll('input, textarea')).filter(function(el){
       return !el.classList.contains('autre-radio');
@@ -860,8 +885,7 @@
   btnNext.addEventListener('click', function(){
     if(activeStep === steps.length - 1){
       if(!validateAllSteps()) return;
-      fillPrintValues();
-      window.print();
+      downloadReport();
       return;
     }
     if(validateStep()){
@@ -881,11 +905,8 @@
 
   btnDownload.addEventListener('click', function(){
     if(!validateAllSteps()) return;
-    fillPrintValues();
-    window.print();
+    downloadReport();
   });
-
-  window.addEventListener('beforeprint', fillPrintValues);
 
   updateProgress();
   setActiveStep(0);
